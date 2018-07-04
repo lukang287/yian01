@@ -30,3 +30,7 @@ if (!function_exists('debug')) {
         log_message('debug', implode(' ', $messages) . "\n");
     }
 }
+
+
+
+
