@@ -27,7 +27,7 @@ Page({
     let notes = JSON.parse(wx.getStorageSync('notes') || '[]');
 
     // 添加播放标记
-    notes = notes.map(v => {
+    notes = notes.map(v => {  
       v.playing = false;
 
       if (v.isRec === true && !v.word) {
@@ -120,8 +120,8 @@ Page({
   voiceStartRecord() {
     console.log('start record');
     recorderManager.start({
-      // 最大长度设置为 2 分钟
-      duration: 2 * 60 * 1000,
+      // 最大长度设置为 半分钟
+      duration: 30 * 1000,
       // 格式
       format: 'mp3',
       sampleRate: 16000,
@@ -186,12 +186,12 @@ Page({
       filePath: path,
       name: 'file',
       success: res => {
+        console.log(res);
+
         let data = res.data;
         if (typeof data === 'string') {
           data = JSON.parse(data);
         }
-
-        console.log(res);
 
         if (data.code !== 0) {
           console.error(data);
