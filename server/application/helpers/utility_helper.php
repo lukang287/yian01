@@ -19,7 +19,8 @@ function generate_track_id()
     return $char_id;
 }
 
-function api_return_json($error_code, $data=array()){
+function api_return_json($error_code,$message = '', $data=array()){
     $CI = &get_instance();
-    return $CI->json(array('code'=>$error_code, 'reason'=>ApiConstants::getErrorMsg($error_code), 'data'=>$data));
+    $reason = empty($message)?ApiConstants::getErrorMsg($error_code):$message;
+    return $CI->json(array('code'=>$error_code, 'reason'=>$reason, 'data'=>$data));
 }

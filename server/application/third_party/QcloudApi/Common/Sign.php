@@ -41,14 +41,14 @@ class QcloudApi_Common_Sign
      * @return
      */
     public static function makeSignPlainText($requestParams,
-        $requestMethod = 'GET', $requestHost = YUNAPI_URL,
+        $requestMethod = 'GET', $requestHost = '',
         $requestPath = '/v2/index.php')
     {
 
         $url = $requestHost . $requestPath;
 
         // 取出所有的参数
-        $paramStr = self::_buildParamStr($requestParams, $requestMethod);
+        $paramStr = self::_buildParamStr($requestParams, $requestMethod, $requestHost, $requestPath);
 
         $plainText = $requestMethod . $url . $paramStr;
 
@@ -62,11 +62,16 @@ class QcloudApi_Common_Sign
      * @param  string $requestMethod 请求方法
      * @return
      */
-    protected static function _buildParamStr($requestParams, $requestMethod = 'GET')
+    protected static function _buildParamStr($requestParams, $requestMethod = 'GET', $requestHost= '', $requestPath='')
     {
         $paramStr = '';
         ksort($requestParams);
         $i = 0;
+        if($requestParams['Action'] == 'SentenceRecognition'){
+            $paramStr = $requestMethod.$requestHost.$requestPath;
+            unset($requestParams['data']);
+            unset($requestParams['dataLen']);
+        }
         foreach ($requestParams as $key => $value)
         {
             if ($key == 'Signature')
@@ -95,6 +100,7 @@ class QcloudApi_Common_Sign
             ++$i;
         }
 
+        log_message('debug', '生成待签名字符串：'.$paramStr);
         return $paramStr;
     }
 

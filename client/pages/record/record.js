@@ -39,6 +39,7 @@ Page({
 
     this.setData({ notes });
     recorderManager.onStop(this.onVoiceStop);
+    recorderManager.onError(this.displayError);
     // recorderManager.onFrameRecorded(res => {
     //     const { frameBuffer, isLastFrame } = res
     //     console.log('frameBuffer.byteLength', frameBuffer.byteLength)
@@ -47,6 +48,10 @@ Page({
     //         isLastFrame: isLastFrame
     //     })
     // });
+  },
+
+  displayError(){
+    console.log('record error');
   },
 
   playVoice(e) {

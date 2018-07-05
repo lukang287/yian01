@@ -10,3 +10,5 @@
 /server/application/cache/
 /server/logs/*
 /server/.idea/*
+
+*.xml

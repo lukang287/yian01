@@ -41,19 +41,20 @@ class Recognise extends CI_Controller{
         $service->setConfigRequestMethod(QcloudApi::METHOD_POST);
         $service->setRequestPath($wxconfig['path']);
 
+        $action = 'SentenceRecognition';
         $yian_track_id = generate_track_id();
         $params = array(
+            'Action' => $action,
+            'Version' => '2018-05-22',
             'ProjectId' => $wxconfig['ProjectId'],
             'SubServiceType' => 2,
             'EngSerViceType' => '16k',
             'SourceType' => 1,
             'VoiceFormat' => 'mp3',
             'UsrAudioKey' => $yian_track_id,
-            'Url' => '',
             'Data' => $voiceContent,       //语音数据，当SourceType 值为1时必须填写，为0可不写。要base64编码。音频数据要小于900k
             'DataLen' => $voiceContentLen      //数据长度，当 SourceType 值为1时必须填写，为0可不写。
         );
-        $action = 'SentenceRecognition';
         // 生成请求的URL，不发起请求
         $url = $service->generateUrl($action, $params);
         log_message('debug', '生成的请求url：'.$url);
@@ -73,7 +74,7 @@ class Recognise extends CI_Controller{
             $error = $service->getError();
             log_message('error', '请求wx失败:'.'Error code:' . $error->getCode() . ' message:' . $error->getMessage());
             if (!$ret){
-                api_return_json(API_RET_THIRD_ERROR);
+                api_return_json(API_RET_THIRD_ERROR, 'Error code:' . $error->getCode() . ' message:' . $error->getMessage());
                 return;
             }
             //成功

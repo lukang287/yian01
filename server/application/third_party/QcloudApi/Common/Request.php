@@ -73,7 +73,11 @@ class QcloudApi_Common_Request
         if (!isset($paramArray['Timestamp']))
             $paramArray['Timestamp'] = time();
 
-        $paramArray['RequestClient'] = self::$_version;
+        //$paramArray['RequestClient'] = self::$_version;
+        log_message('debug', '签名参数paramArray:'.var_export($paramArray, true));
+        log_message('debug', '签名参数requestMethod:'.var_export($requestMethod, true));
+        log_message('debug', '签名参数requestHost:'.var_export($requestHost, true));
+        log_message('debug', '签名参数requestPath:'.var_export($requestPath, true));
         $plainText = QcloudApi_Common_Sign::makeSignPlainText($paramArray,
             $requestMethod, $requestHost, $requestPath);
 
@@ -110,7 +114,7 @@ class QcloudApi_Common_Request
         if (!isset($paramArray['Timestamp']))
             $paramArray['Timestamp'] = time();
 
-        $paramArray['RequestClient'] = self::$_version;
+        //$paramArray['RequestClient'] = self::$_version;
         $plainText = QcloudApi_Common_Sign::makeSignPlainText($paramArray,
             $requestMethod, $requestHost, $requestPath);
 
@@ -164,6 +168,7 @@ class QcloudApi_Common_Request
         self::$_rawResponse = $resultStr;
 
         $result = json_decode($resultStr, true);
+        log_message('debug', 'curl response '.var_export($result,true));
         if (!$result)
         {
             return $resultStr;

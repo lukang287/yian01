@@ -40,7 +40,7 @@ class QcloudApi_Common_Error
      */
     public function __construct($code, $message, $ext = '')
     {
-        $code = (int) $code;
+        //$code = (int) $code;
         $this->_code    = $code ? $code : self::LOCAL_ERROR_CODE;
         $this->_message = $message;
         $this->_ext     = $ext;

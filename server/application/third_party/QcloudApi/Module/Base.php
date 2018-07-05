@@ -190,8 +190,8 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
         $action = ucfirst($name);
         $params['Action'] = $action;
 
-        if (!isset($params['Region']))
-            $params['Region'] = $this->_defaultRegion;
+        /*if (!isset($params['Region']))
+            $params['Region'] = $this->_defaultRegion;*/
 
         return QcloudApi_Common_Request::generateUrl($params, $this->_secretId, $this->_secretKey, $this->_requestMethod,
                                                    $this->_serverHost, $this->_serverUri);
@@ -208,7 +208,11 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
     {
         $response = $this->_dispatchRequest($name, $arguments);
 
-        return $this->_dealResponse($response);
+        if ($name == 'SentenceRecognition'){
+            return $this->_dealAsrResponse($response);
+        }else{
+            return $this->_dealResponse($response);
+        }
     }
 
     /**
@@ -223,9 +227,10 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
         $action = ucfirst($name);
 
         $params = array();
-        if (is_array($arguments) && !empty($arguments)) {
+        /*if (is_array($arguments) && !empty($arguments)) {
             $params = (array) $arguments[0];
-        }
+        }*/
+        $params = $arguments;
         $params['Action'] = $action;
 
         if (!isset($params['Region']))
@@ -267,6 +272,34 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
 
         if (count($rawResponse))
             return $rawResponse;
+        else
+            return true;
+    }
+
+    /**
+     * _dealResponse
+     * 处理Asr返回
+     * @param  array $rawResponse
+     * @return
+     */
+    protected function _dealAsrResponse($rawResponse)
+    {
+        if (!is_array($rawResponse) || !isset($rawResponse['Response'])) {
+            $this->setError("", 'request falied!');
+            return false;
+        }
+
+        if (isset($rawResponse['Response']['Error']) && is_array($rawResponse['Response']['Error'])) {
+            $ext = '';
+            require_once QCLOUDAPI_ROOT_PATH . '/Common/Error.php';
+            if (isset($rawResponse['Response']['Error'])) {
+                $this->setError($rawResponse['Response']['Error']['Code'], $rawResponse['Response']['Error']['Message'], $ext);
+                return false;
+            }
+        }
+
+        if (count($rawResponse['Response']))
+            return $rawResponse['Result'];
         else
             return true;
     }
