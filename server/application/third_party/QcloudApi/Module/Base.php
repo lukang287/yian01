@@ -233,8 +233,8 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
         $params = $arguments;
         $params['Action'] = $action;
 
-        if (!isset($params['Region']))
-            $params['Region'] = $this->_defaultRegion;
+        /*if (!isset($params['Region']))
+            $params['Region'] = $this->_defaultRegion;*/
 
         require_once QCLOUDAPI_ROOT_PATH . '/Common/Request.php';
 

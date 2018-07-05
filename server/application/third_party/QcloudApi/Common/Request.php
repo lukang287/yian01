@@ -115,11 +115,9 @@ class QcloudApi_Common_Request
             $paramArray['Timestamp'] = time();
 
         //$paramArray['RequestClient'] = self::$_version;
-        $plainText = QcloudApi_Common_Sign::makeSignPlainText($paramArray,
-            $requestMethod, $requestHost, $requestPath);
-
+        $plainText = QcloudApi_Common_Sign::makeSignPlainText($paramArray,$requestMethod, $requestHost, $requestPath);
         $paramArray['Signature'] = QcloudApi_Common_Sign::sign($plainText, $secretKey);
-
+        log_message('debug', 'key = '.$secretKey.' ,sign = '.var_export($paramArray['Signature'], true));
         $url = 'https://' . $requestHost . $requestPath;
 
         $ret = self::_sendRequest($url, $paramArray, $requestMethod);
@@ -136,7 +134,7 @@ class QcloudApi_Common_Request
      */
     protected static function _sendRequest($url, $paramArray, $method = 'POST')
     {
-
+        log_message('debug', '发送的参数为：'.var_export($paramArray, true));
         $ch = curl_init();
 
         if ($method == 'POST')

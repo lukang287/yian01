@@ -4,7 +4,18 @@
  * User: lukang
  * Date: 2018/7/4
  */
-require_once dirname(__FILE__).'/../third_party/QcloudApi/QcloudApi.php';
+//require_once dirname(__FILE__).'/../third_party/QcloudApi/QcloudApi.php';
+require_once dirname(__FILE__).'/../third_party/TCloudAutoLoader.php';
+// 导入对应产品模块的client
+use TencentCloud\Aai\V20180522\AaiClient;
+// 导入要请求接口对应的Request类
+use TencentCloud\Aai\V20180522\Models\SentenceRecognitionRequest;
+use TencentCloud\Common\Exception\TencentCloudSDKException;
+use TencentCloud\Common\Credential;
+// 导入可选配置类
+//use TencentCloud\Common\Profile\ClientProfile;
+//use TencentCloud\Common\Profile\HttpProfile;
+
 
 class Recognise extends CI_Controller{
 
@@ -30,18 +41,56 @@ class Recognise extends CI_Controller{
         }
 
         //文件内容
-        $voiceContent = base64_encode(file_get_contents($file['tmp_name']));
-        $voiceContentLen = strlen($voiceContent);
+        $rawSource = file_get_contents($file['tmp_name']);
+        $voiceContent = $rawSource;
+        $voiceContentLen = strlen($rawSource);
 
         //创建Asr服务对象
         $wxconfig = $this->config->item('wx.asr.config');
-        $service = QcloudApi::load(QcloudApi::MODULE_ASR);
-        //设置SecretId/SecretKey
-        $service->setConfig($wxconfig);
-        $service->setConfigRequestMethod(QcloudApi::METHOD_POST);
-        $service->setRequestPath($wxconfig['path']);
+        try {
+            // 实例化一个证书对象，入参需要传入腾讯云账户secretId，secretKey
+            /*// 实例化一个http选项，可选的，没有特殊需求可以跳过
+            $httpProfile = new HttpProfile();
+            $httpProfile->setReqMethod("GET");  // post请求(默认为post请求)
+            $httpProfile->setReqTimeout(30);    // 请求超时时间，单位为秒(默认60秒)
+            // 实例化一个client选项，可选的，没有特殊需求可以跳过
+            $clientProfile = new ClientProfile();
+            $clientProfile->setHttpProfile($httpProfile);*/
 
-        $action = 'SentenceRecognition';
+            $cred = new Credential($wxconfig['SecretId'], $wxconfig['SecretKey']);
+
+            // # 实例化要请求产品(以cvm为例)的client对象
+            $client = new AaiClient($cred, "ap-guangzhou");
+
+            // 实例化一个请求对象
+            $req = new SentenceRecognitionRequest();
+
+            // 通过client对象调用想要访问的接口，需要传入请求对象
+            $action = 'SentenceRecognition';
+            $yian_track_id = generate_track_id();
+            $params = array(
+                'Action' => $action,
+                'Version' => '2018-05-22',
+                'ProjectId' => $wxconfig['ProjectId'],
+                'SubServiceType' => 2,
+                'EngSerViceType' => '16k',
+                'SourceType' => 1,
+                'VoiceFormat' => 'mp3',
+                'UsrAudioKey' => $yian_track_id,
+                'Data' => $voiceContent,       //语音数据，当SourceType 值为1时必须填写，为0可不写。要base64编码。音频数据要小于900k
+                'DataLen' => $voiceContentLen      //数据长度，当 SourceType 值为1时必须填写，为0可不写。
+            );
+            //$req->fromJsonString(json_encode($params));
+            $resp = $client->__call($action, $params);
+
+            print_r($resp->toJsonString());
+        }
+        catch(TencentCloudSDKException $e) {
+            echo $e;
+        }
+        return;
+
+
         $yian_track_id = generate_track_id();
         $params = array(
             'Action' => $action,

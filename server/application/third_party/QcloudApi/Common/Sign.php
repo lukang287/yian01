@@ -44,14 +44,16 @@ class QcloudApi_Common_Sign
         $requestMethod = 'GET', $requestHost = '',
         $requestPath = '/v2/index.php')
     {
-
         $url = $requestHost . $requestPath;
-
+        log_message('debug', '$requestParams '.var_export($requestParams, true));
+        log_message('debug', '$requestMethod '.var_export($requestMethod, true));
+        log_message('debug', '$requestHost '.var_export($requestHost, true));
+        log_message('debug', '$requestPath '.var_export($requestPath, true));
         // 取出所有的参数
-        $paramStr = self::_buildParamStr($requestParams, $requestMethod, $requestHost, $requestPath);
+        $paramStr = self::_buildParamStr($requestParams, $requestMethod);
 
         $plainText = $requestMethod . $url . $paramStr;
-
+        log_message('debug', '生成待签名字符串$plainText：'.$plainText);
         return $plainText;
     }
 
@@ -62,16 +64,12 @@ class QcloudApi_Common_Sign
      * @param  string $requestMethod 请求方法
      * @return
      */
-    protected static function _buildParamStr($requestParams, $requestMethod = 'GET', $requestHost= '', $requestPath='')
+    protected static function _buildParamStr($requestParams, $requestMethod = 'GET')
     {
         $paramStr = '';
         ksort($requestParams);
+        log_message('debug', 'ksort requestParams '.var_export($requestParams, true));
         $i = 0;
-        if($requestParams['Action'] == 'SentenceRecognition'){
-            $paramStr = $requestMethod.$requestHost.$requestPath;
-            unset($requestParams['data']);
-            unset($requestParams['dataLen']);
-        }
         foreach ($requestParams as $key => $value)
         {
             if ($key == 'Signature')
@@ -99,8 +97,6 @@ class QcloudApi_Common_Sign
             $paramStr .= $key . '=' . $value;
             ++$i;
         }
-
-        log_message('debug', '生成待签名字符串：'.$paramStr);
         return $paramStr;
     }
 
