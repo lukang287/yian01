@@ -1,0 +1,6 @@
+# ignore CI generated files
+/server/logs/*
+/server/application/logs/
+/server/application/cache/
+/server/logs/*
+/server/.idea/*
