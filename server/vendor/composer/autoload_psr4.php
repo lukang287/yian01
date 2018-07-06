@@ -6,6 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
+    'TencentCloud\\' => array($vendorDir . '/tencentcloud/tencentcloud-sdk-php/src/TencentCloud'),
+    'Qcloud\\Cos\\' => array($vendorDir . '/qcloud/cos-sdk-v5/src'),
     'QCloud_WeApp_SDK\\' => array($vendorDir . '/qcloud/weapp-sdk/lib'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
+    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
+    'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
+    'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
 );

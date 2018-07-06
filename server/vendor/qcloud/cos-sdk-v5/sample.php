@@ -113,38 +113,6 @@ try {
     echo "$e\n";
 }
 
-## 预签名上传createPresignedUrl
-## 获取带有签名的url
-### 简单上传预签名
-try {
-    #此处可以替换为其他上传接口
-    $command = $cosClient->getCommand('putObject', array(
-        'Bucket' => $bucket,
-        'Key' => $key,
-        'Body' => '' //Body可以任意
-    ));
-    $signedUrl = $command->createPresignedUrl('+10 minutes');
-    echo ($signedUrl);
-} catch (\Exception $e) {
-    echo "$e\n";
-}
-
-### 分块上传预签名
-try {
-    #此处可以替换为其他上传接口
-    $command = $cosClient->getCommand('uploadPart', array(
-        'Bucket' => $bucket,
-        'Key' => $key,
-        'UploadId' => $uploadId,
-        'PartNumber' => '1',
-        'Body' => '' //Body可以任意
-    ));
-    $signedUrl = $command->createPresignedUrl('+10 minutes');
-    echo ($signedUrl);
-} catch (\Exception $e) {
-    echo "$e\n";
-}
-
 
 # 下载文件
 ## getObject(下载文件)
@@ -200,8 +168,11 @@ try {
 
 ## getObjectUrl(获取文件UrL)
 try {
+    $url = "/{$key}";
+    $request = $cosClient->get($url);
     $signedUrl = $cosClient->getObjectUrl($bucket, $key, '+10 minutes');
     echo ($signedUrl);
+
 } catch (\Exception $e) {
     echo "$e\n";
 }
@@ -271,7 +242,7 @@ try {
 try {
     $result = $cosClient->createBucket(array('Bucket' => $bucket));
     print_r($result);
-} catch (\Exception $e) {
+    } catch (\Exception $e) {
     echo "$e\n";
 }
 
@@ -334,7 +305,7 @@ try {
 ## getBucketLocation
 try {
     $result = $cosClient->getBucketLocation(array(
-        'Bucket' => 'lewzylu02',
+    'Bucket' => 'lewzylu02',
     ));
 } catch (\Exception $e) {
     echo "$e\n";
@@ -453,21 +424,30 @@ try {
         'Bucket' => $bucket,
         'Rules' => array(
             array(
-                'Expiration' => array(
-                    'Days' => 1000,
-                ),
-                'ID' => 'id1',
-                'Filter' => array(
-                    'Prefix' => 'documents/'
-                ),
                 'Status' => 'Enabled',
+                'Filter' => array(
+                    'Tag' => array(
+                        'Key' => 'datalevel',
+                        'Value' => 'backup'
+                    )
+                ),
                 'Transitions' => array(
                     array(
-                        'Days' => 200,
-                        'StorageClass' => 'NEARLINE'),
+                        # 30天后转换为Standard_IA
+                        'Days' => 30,
+                        'StorageClass' => 'Standard_IA'),
+                    array(
+                        # 365天后转换为Archive
+                        'Days' => 365,
+                        'StorageClass' => 'Archive')
                 ),
-            ),
-        )));
+                'Expiration' => array(
+                    # 3650天后过期删除
+                    'Days' => 3650,
+                )
+            )
+        )
+    ));
     print_r($result);
 } catch (\Exception $e) {
     echo "$e\n";
@@ -652,37 +632,6 @@ try {
         $body = fopen("E:/test.txt",'rb'),
         $uploadId = '152448808231afdf221eb558ab15d1e455d2afd025c5663936142fdf5614ebf6d1668e2eda');
     print_r($result);
-} catch (\Exception $e) {
-    echo "$e\n";
-}
-
-
-## 删除某些前缀的空bucket
-function startsWith($haystack, $needle)
-{
-    $length = strlen($needle);
-    return (substr($haystack, 0, $length) === $needle);
-}
-
-try {
-    $result = $cosClient->listBuckets();
-    foreach ($result['Buckets'] as $bucket){
-        $region = $bucket['Location'];
-        $name = $bucket['Name'];
-        if (startsWith($name,'lewzylu')){
-            try {
-                $cosClient2 = new Qcloud\Cos\Client(array('region' => $region,
-                    'credentials'=> array(
-                        'secretId'    => getenv('COS_KEY'),
-                        'secretKey' => getenv('COS_SECRET'))));
-                $rt = $cosClient2->deleteBucket(array('Bucket' => $name));
-                print_r($rt);
-            }catch (\Exception $e) {
-            }
-        }
-
-
-    }
 } catch (\Exception $e) {
     echo "$e\n";
 }

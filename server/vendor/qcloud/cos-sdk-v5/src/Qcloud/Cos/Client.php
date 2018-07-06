@@ -12,7 +12,7 @@ use Qcloud\Cos\Signature;
 use Qcloud\Cos\TokenListener;
 
 class Client extends GSClient {
-    const VERSION = '1.2.3';
+    const VERSION = '1.2.0';
 
     private $region;       // string: region.
     private $credentials;
@@ -81,7 +81,7 @@ class Client extends GSClient {
                 . '$client->get(), $client->head(), $client->post(), $client->put(), etc. methods when passing in a '
                 . 'request object');
         }
-        return $this->signature->createPresignedUrl($request, $expires);
+        return $this->signature->createPresignedUrl($request, $this->credentials, $expires);
     }
     public function getObjectUrl($bucket, $key, $expires = null, array $args = array())
     {
