@@ -24,7 +24,7 @@ var config = {
         uploadUrl: `${host}/weapp/upload`,
 
         //语音识别接口
-        voiceUrl: `${host}/weapp/recognise`
+        voiceUrl: `${host}/weapp/recongnisebd`
     }
 };
 

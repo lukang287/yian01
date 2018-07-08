@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 使用腾讯智能语音SDK
  * User: lukang
  * Date: 2018/7/4
  */
