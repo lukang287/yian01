@@ -12,3 +12,5 @@
 /server/.idea/*
 
 *.xml
+
+/server/vendor/*
