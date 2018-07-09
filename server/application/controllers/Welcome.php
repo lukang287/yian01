@@ -22,4 +22,9 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+
+	public function sdkconfig(){
+	    $file = '/data/release/sdk.config.json';
+	    echo file_get_contents($file);
+    }
 }

@@ -39,7 +39,7 @@ Page({
 
     this.setData({ notes });
     recorderManager.onStop(this.onVoiceStop);
-    recorderManager.onError(this.displayError);
+    //recorderManager.onError(this.displayError);
     // recorderManager.onFrameRecorded(res => {
     //     const { frameBuffer, isLastFrame } = res
     //     console.log('frameBuffer.byteLength', frameBuffer.byteLength)
@@ -211,7 +211,7 @@ Page({
 
           if (cur.code !== 0) {
             pre.hasError = true;
-            pre.errMsg = message;
+            pre.errMsg = cur.message;
           }
 
           pre.text = cur.text;

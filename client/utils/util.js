@@ -39,7 +39,7 @@ var showModel = (title, content) => {
     })
 }
 
-var showTips = (tips) => {
+var showTips = tips => {
   wx.showToast({
   title: tips,
   image: '/utils/warning.png',
