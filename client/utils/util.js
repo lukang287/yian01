@@ -39,11 +39,11 @@ var showModel = (title, content) => {
     })
 }
 
-var showTips = tips => {
+var showTips = (tips) => {
   wx.showToast({
   title: tips,
   image: '/utils/warning.png',
   duration: 2000
 })}
 
-module.exports = { formatTime, showBusy, showSuccess, showModel }
+module.exports = { formatTime, showBusy, showSuccess, showModel, showTips}

@@ -28,4 +28,7 @@ class ApiConstants {
         return self::$const_arr[$error_code];
     }
 
+    //mp3 文件转 16K 16bits 位深的单声道 pcm文件
+    private static $ffmpeg_cmd = "ffmpeg -y  -i aidemo.mp3  -acodec pcm_s16le -f s16le -ac 1 -ar 16000 16k.pcm";
+
 }

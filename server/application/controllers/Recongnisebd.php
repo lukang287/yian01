@@ -8,14 +8,20 @@
 
 require dirname(__FILE__).'/../third_party/aip-speech-php-sdk-1.6.0/AipSpeech.php';
 
-class Recongnisebd extends CI_Controller{
+class Recongnisebd extends My_Controller{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model("voice_model");
+    }
 
     public function index(){
 
         // 处理文件上传
-        log_message('debug', '接收到的音频数据为： '.var_export($_FILES, true));
+       /* log_message('debug', '接收到的音频数据为： '.var_export($_FILES, true));
 
-        /*$file = $_FILES['file']; // 去除 field 值为 file 的文件
+        $file = $_FILES['file']; // 去除 field 值为 file 的文件
 
         ini_set('upload_max_filesize', '1M');
         ini_set('post_max_size', '2M');
@@ -33,9 +39,9 @@ class Recongnisebd extends CI_Controller{
         }
 
         //文件内容
-        $rawContent = file_get_contents($file['tmp_name']);*/
+        $rawContent = file_get_contents($file['tmp_name']);
 
-        /*$at = $this->_get_baidu_at();
+        $at = $this->_get_baidu_at();
         return;*/
         $baiduconfig = $this->config->item('baidu.asr.config');
         $access_token = $this->get_baidu_accessToken();
@@ -47,7 +53,7 @@ class Recongnisebd extends CI_Controller{
         $client = new AipSpeech($baiduconfig['APP_ID'], $baiduconfig['API_KEY'], $baiduconfig['SECRET_KEY']);
         // 识别本地文件
         $yian_track_id = generate_track_id();
-        $res = $client->asr(file_get_contents(dirname(__FILE__).'/test.pcm'), 'pcm', 16000, array(
+        $res = $client->asr(file_get_contents(dirname(__FILE__).'/wx16k.pcm'), 'pcm', 16000, array(
             'dev_pid' => 1536,'cuid'=> $yian_track_id, 'token' => $access_token
         ));
         //echo 'baidu res - '.var_export($res, true);
@@ -78,22 +84,5 @@ class Recongnisebd extends CI_Controller{
             return isset($res['access_token'])?$res['access_token']:false;
         }
         return false;
-    }
-
-    private function _get_baidu_at(){
-        $url = 'https://aip.baidubce.com/oauth/2.0/token';
-        $baiduconfig = $this->config->item('baidu.asr.config');
-        $req = array('grant_type'=>'client_credentials',
-            'client_id' => $baiduconfig['API_KEY'],
-            'client_secret' => $baiduconfig['SECRET_KEY']);
-        $o = "";
-        foreach ( $req as $k => $v )
-        {
-            $o.= "$k=" . urlencode( $v ). "&" ;
-        }
-        $post_data = substr($o,0,-1);
-        $res = request_post($url, $post_data);
-
-        var_dump($res);
     }
 }

@@ -130,8 +130,8 @@ Page({
       // 格式
       format: 'mp3',
       sampleRate: 16000,
-      encodeBitRate: 25600,
-      frameSize: 9,
+      encodeBitRate: 51200,
+      frameSize: 50,
       numberOfChannels: 1
     });
   },
@@ -171,6 +171,7 @@ Page({
         notes.unshift(note);
 
         this.recognizeVoice(voiceKey, savedFilePath);
+        
         this.saveToStorage(notes);
         this.setData({ notes });
       },
