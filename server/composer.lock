@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c9bcd7dbee07455b38ee50d83a577c8",
+    "content-hash": "1ce0ec67dc7378d038a7c1da3df39b04",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -186,6 +186,54 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "nicolab/php-ftp-client",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nicolab/php-ftp-client.git",
+                "reference": "41714d6a81122cde20d1998b849e53101e63c228"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/Nicolab/php-ftp-client/41714d6a81122cde20d1998b849e53101e63c228.zip",
+                "reference": "41714d6a81122cde20d1998b849e53101e63c228",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "FtpClient": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Tallefourtane",
+                    "email": "dev@nicolab.net",
+                    "homepage": "http://nicolab.net"
+                }
+            ],
+            "description": "A flexible FTP and SSL-FTP client for PHP. This lib provides helpers easy to use to manage the remote files.",
+            "homepage": "https://github.com/Nicolab/php-ftp-client",
+            "keywords": [
+                "file",
+                "ftp",
+                "helper",
+                "lib",
+                "server",
+                "sftp",
+                "ssl",
+                "ssl-ftp"
+            ],
+            "time": "2017-01-20T06:37:38+00:00"
         },
         {
             "name": "psr/http-message",

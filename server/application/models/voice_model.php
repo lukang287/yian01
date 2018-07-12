@@ -7,9 +7,9 @@
 
 class Voice_Model extends My_Model {
 
-    private $table_name = "voice";
-    private $field_return = array("voice_id","user_id","voice_text","create_time", "update_time");
-    private $field_all = array("voice_id","user_id","voice_text","voice_status", "create_time", "update_time");
+    private $table_name = "ya_voice";
+    private $field_return = array("voice_id","user_id","voice_ftp_path","user_input_text","voice_text_tx","voice_text_bd","create_time", "update_time");
+    private $field_all = array("voice_id","user_id","voice_ftp_path","user_input_text","voice_text_tx","voice_text_bd","voice_status", "create_time", "update_time");
 
     //field要与允许的fieldlist相同
     public function insert($voice_item){

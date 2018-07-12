@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.6.0",
         "qcloud/weapp-sdk": "v2.1.1",
-        "tencentcloud/tencentcloud-sdk-php": "3.0.8"
+        "tencentcloud/tencentcloud-sdk-php": "3.0.8",
+        "nicolab/php-ftp-client":"v1.4.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

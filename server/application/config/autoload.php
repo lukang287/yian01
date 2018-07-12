@@ -103,7 +103,8 @@ $autoload['helper'] = array('general', 'utility');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('wxconfig', 'baiduconfig');
+//bootstrap 通用配置
+$autoload['config'] = array('bootstrap','wxconfig', 'baiduconfig');
 
 /*
 | -------------------------------------------------------------------

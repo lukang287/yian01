@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'FtpClient\\FtpClient' => $vendorDir . '/nicolab/php-ftp-client/src/FtpClient/FtpClient.php',
+    'FtpClient\\FtpException' => $vendorDir . '/nicolab/php-ftp-client/src/FtpClient/FtpException.php',
+    'FtpClient\\FtpWrapper' => $vendorDir . '/nicolab/php-ftp-client/src/FtpClient/FtpWrapper.php',
     'GuzzleHttp\\Client' => $vendorDir . '/guzzlehttp/guzzle/src/Client.php',
     'GuzzleHttp\\ClientInterface' => $vendorDir . '/guzzlehttp/guzzle/src/ClientInterface.php',
     'GuzzleHttp\\Cookie\\CookieJar' => $vendorDir . '/guzzlehttp/guzzle/src/Cookie/CookieJar.php',

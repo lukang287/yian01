@@ -13,5 +13,4 @@ class My_Controller extends CI_Controller{
         //自定义初始化
     }
 
-
 }
