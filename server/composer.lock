@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "1ce0ec67dc7378d038a7c1da3df39b04",
@@ -197,7 +197,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/Nicolab/php-ftp-client/41714d6a81122cde20d1998b849e53101e63c228.zip",
+                "url": "https://api.github.com/repos/Nicolab/php-ftp-client/zipball/41714d6a81122cde20d1998b849e53101e63c228",
                 "reference": "41714d6a81122cde20d1998b849e53101e63c228",
                 "shasum": ""
             },

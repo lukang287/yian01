@@ -20,15 +20,13 @@ const BAIDU_CHN_YUAN = 1936;//普通话远场	远场模型	有标点	不支持
 class Recongnisebd extends My_Controller{
 
     private $voice_id = '';
-    private $local_file = '';
+    private $local_mp3_file = '';
     private $local_pcm_file = '';
-
     private $mp3_len = 0;
-    private $mp3_file_name = '';
-    private $mp3_ftp_path = '';
+    private $remote_ftp_path = '/';
+
     private $ftp_config = array();
     private $ftp_client = null;
-
 
     public function __construct()
     {
@@ -46,25 +44,27 @@ class Recongnisebd extends My_Controller{
         // 处理文件上传
         log_message('debug', '接收到的音频数据为： '.var_export($_FILES, true));
         $this->voice_id = generate_unique_id();
-        $this->local_file = APPPATH.'cache/voice_'.$this->voice_id.'.mp3';
+        $this->local_mp3_file = APPPATH.'cache/voice_'.$this->voice_id.'.mp3';
         //接收文件处理
         if(!$this->_get_recv_mp3()){
-            log_message('error', '接收MP3文件失败:'.$this->local_file);
+            log_message('error', '接收MP3文件失败:'.$this->local_mp3_file);
             return ;
         }
 
         //上传文件到ftp，写入到数据库
-        if (is_file($this->local_file)){
-            $remote_file = 'voice_'.$this->voice_id.'.mp3';
-            $ftp_res = $this->ftp_client->put($remote_file, $this->local_file, $this->ftp_config['ftp_model']);
+        if (is_file($this->local_mp3_file)){
+            $remote_file = $this->remote_ftp_path.'voice_'.$this->voice_id.'.mp3';
+            $ftp_res = $this->ftp_client->put($remote_file, $this->local_mp3_file, $this->ftp_config['ftp_model']);
             if (!$ftp_res){
-                log_message('error', '上报本地语言MP3文件到ftp server失败:'.$this->local_file);
+                log_message('error', '上报本地语言MP3文件到ftp server失败:'.$this->local_mp3_file);
             }
+            //ftp文件存入数据库
+
         }
 
         //转码到pcm
         if (!$this->_convert_to_mp3()){
-            log_message('error', 'MP3转码pcm失败:'.$this->local_file);
+            log_message('error', 'MP3转码pcm失败:'.$this->local_mp3_file);
             return ;
         }
 
@@ -84,7 +84,20 @@ class Recongnisebd extends My_Controller{
         //echo 'baidu res - '.var_export($res, true);
         if (isset($res['err_no']) && $res['err_no'] === 0){
             //成功，不带标点的
+            //上传文件到ftp，写入到数据库
+            if (is_file($this->local_mp3_file)){
+                $remote_file = $this->remote_ftp_path.'voice_'.$this->voice_id.'.mp3';
+                $ftp_res = $this->ftp_client->put($remote_file, $this->local_mp3_file, $this->ftp_config['ftp_model']);
+                if (!$ftp_res){
+                    log_message('error', '上报本地语言MP3文件到ftp server失败:'.$this->local_mp3_file);
+                }
+                //ftp文件存入数据库
+
+            }
             //删除本地文件
+            @unlink($this->local_mp3_file);
+            @unlink($this->local_pcm_file);
+
             //返回处理结果
             $ret_msg = array(array('code'=> 0, 'text'=>$res['result'], 'message'=>'ok'));
             api_return_json(API_RET_SUCCESS, 'success', $ret_msg);
@@ -118,16 +131,16 @@ class Recongnisebd extends My_Controller{
         //文件内容
         $rawContent = file_get_contents($file['tmp_name']);
         $this->mp3_len = strlen($rawContent);
-        file_put_contents($this->local_file, $rawContent);
+        file_put_contents($this->local_mp3_file, $rawContent);
         return true;
     }
 
     private function _convert_to_mp3(){
         $this->local_pcm_file = APPPATH.'cache/c_voice_'.$this->voice_id.'.pcm';
-        $ffmpeg_cmd = sprintf("ffmpeg -y  -i %s -acodec pcm_s16le -f s16le -ac 1 -ar 16000 %s", $this->local_file, $this->local_pcm_file);
+        $ffmpeg_cmd = sprintf("ffmpeg -y  -i %s -acodec pcm_s16le -f s16le -ac 1 -ar 16000 %s", $this->local_mp3_file, $this->local_pcm_file);
         $convert_res = exec($ffmpeg_cmd);
         if (!$convert_res){
-            log_message('error', 'MP3转码pcm失败:'.$this->local_file);
+            log_message('error', 'MP3转码pcm失败:'.$this->local_mp3_file);
             return false;
         }
         return true;
