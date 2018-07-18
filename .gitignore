@@ -1,8 +1,8 @@
 # ignore CI generated files
-server/application/logs/
-server/application/cache/
-server/logs/*
-server/.idea/*
+/server/application/logs/
+/server/application/cache/
+/server/logs/*
+/server/.idea/*
 
 *.xml
 
