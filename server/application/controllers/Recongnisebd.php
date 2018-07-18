@@ -40,13 +40,13 @@ class Recongnisebd extends MY_Controller{
     }
 
     public function index(){
-
+        $file = $_FILES['file']; // 去除 field 值为 file 的文件
         // 处理文件上传
         log_message('debug', '接收到的音频数据为： '.var_export($_FILES, true));
         $this->voice_id = generate_unique_id();
         $this->local_mp3_file = APPPATH.'cache/voice_'.$this->voice_id.'.mp3';
         //接收文件处理
-        if(!$this->_get_recv_mp3()){
+        if(!$this->_get_recv_mp3($file)){
             log_message('error', '接收MP3文件失败:'.$this->local_mp3_file);
             return ;
         }
@@ -110,8 +110,7 @@ class Recongnisebd extends MY_Controller{
         return;
     }
 
-    private function _get_recv_mp3(){
-        $file = $_FILES['file']; // 去除 field 值为 file 的文件
+    private function _get_recv_mp3($file){
 
         ini_set('upload_max_filesize', '1M');
         ini_set('post_max_size', '2M');
