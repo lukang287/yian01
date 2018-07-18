@@ -11,6 +11,7 @@ class MY_Controller extends CI_Controller{
     {
         parent::__construct();
         //自定义初始化
+        header('Content-Type: application/json;charset=utf-8');
     }
 
 
