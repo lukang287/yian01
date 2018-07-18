@@ -104,7 +104,7 @@ $autoload['helper'] = array('general', 'utility');
 |
 */
 //bootstrap 通用配置
-$autoload['config'] = array('bootstrap','wxconfig', 'baiduconfig');
+$autoload['config'] = array('wxappconfig');
 
 /*
 | -------------------------------------------------------------------
