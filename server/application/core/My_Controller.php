@@ -5,7 +5,7 @@
  * Date: 2018/7/11
  */
 
-class My_Controller extends CI_Controller{
+class MY_Controller extends CI_Controller{
 
     function __construct()
     {

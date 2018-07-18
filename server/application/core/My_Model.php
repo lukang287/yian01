@@ -16,7 +16,7 @@ const SQL_WHERE_LIKE_BOTH = "both";//默认
 const SQL_WHERE_ORDER_BY_DESC = "desc";
 const SQL_WHERE_ORDER_BY_ASC = "asc";
 
-class My_Model extends CI_Model{
+class MY_Model extends CI_Model{
 
     public function __construct()
     {

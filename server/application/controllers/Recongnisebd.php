@@ -17,7 +17,7 @@ const BAIDU_YUEYU = 1637;//粤语		有标点	不支持自定义词库
 const BAIDU_SICHUAN = 1837;//四川话		有标点	不支持自定义词库
 const BAIDU_CHN_YUAN = 1936;//普通话远场	远场模型	有标点	不支持
 
-class Recongnisebd extends My_Controller{
+class Recongnisebd extends MY_Controller{
 
     private $voice_id = '';
     private $local_mp3_file = '';
