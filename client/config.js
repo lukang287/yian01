@@ -3,7 +3,7 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-var host = 'https://kck3s5el.qcloud.la';
+var host = 'https://api.pslelec.com';//'https://kck3s5el.qcloud.la';
 
 var config = {
 
