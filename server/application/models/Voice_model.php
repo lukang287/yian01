@@ -5,7 +5,7 @@
  * Date: 2018/7/11
  */
 
-class Voice_Model extends My_Model {
+class Voice_Model extends MY_Model {
 
     private $table_name = "voice";
     private $field_return = array("voice_id","user_id","voice_text","create_time", "update_time");
