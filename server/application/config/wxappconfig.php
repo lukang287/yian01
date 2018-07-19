@@ -25,7 +25,7 @@ $config['baidu.asr.config'] = array(
 //ftp 配置
 $config['ftp.config'] = array(
     'host' => '111.230.248.221',
-    'username' => 'ftpuser2',
-    'password' => 'lk123456',
+    'username' => 'ftpuser4',
+    'password' => 'lk151611',
     'ftp_model' => FTP_BINARY,
 );
