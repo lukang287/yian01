@@ -23,7 +23,7 @@ class MY_Model extends CI_Model{
         // init the CI_Model parent class
         parent::__construct();
 
-        //$this->db->set_dbprefix('ya_');
+        $this->db->set_dbprefix('ya_');
         //$this->db->dbprefix('tablename'); // outputs newprefix_tablename
         //$this->load->database(); //手动链接db
     }

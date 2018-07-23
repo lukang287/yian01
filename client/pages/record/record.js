@@ -131,8 +131,9 @@ Page({
       format: 'mp3',
       sampleRate: 16000,
       encodeBitRate: 51200,
-      frameSize: 50,
-      numberOfChannels: 1
+      //frameSize: 50,
+      numberOfChannels: 1,
+      audioSource:'auto'
     });
   },
 

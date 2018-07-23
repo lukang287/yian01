@@ -73,6 +73,7 @@ class Recongnisebd extends MY_Controller{
         //echo 'baidu res - '.var_export($res, true);
         log_message('debug', '百度语言识别返回的结果为:'.var_export($res, true));
         if (isset($res['err_no']) && $res['err_no'] === 0){
+            $baidu_msg = $res['result'][0];
             //成功，不带标点的
             //上传文件到ftp，写入到数据库
             if (is_file($this->local_mp3_file)){
@@ -90,7 +91,7 @@ class Recongnisebd extends MY_Controller{
                     'voice_ftp_path' => $this->remote_ftp_path,
                     'user_input_text' => '',
                     'voice_text_tx' => '',
-                    'voice_text_bd' => '',
+                    'voice_text_bd' => $baidu_msg,
                     'voice_status' => 0
                 );
                 $db_ret = $this->voice_model->insert($db_insert);
@@ -105,15 +106,16 @@ class Recongnisebd extends MY_Controller{
             @unlink($this->local_pcm_file);
 
             //返回处理结果
-            $ret_msg = array(array('code'=> 0, 'text'=>$res['result'], 'message'=>'ok'));
+            $ret_msg = array(array('code'=> 0, 'text'=>$baidu_msg, 'message'=>'ok'));
             api_return_json(API_RET_SUCCESS, 'success', $ret_msg);
+            return;
         }else{
             //失败
             log_message('error', '百度语言识别失败，返回的结果为:'.var_export($res, true));
             //删除本地文件
             @unlink($this->local_mp3_file);
             @unlink($this->local_pcm_file);
-            api_return_json(API_RET_THIRD_ERROR, $res['err_msg'], $res);
+            api_return_json(API_RET_THIRD_ERROR, '语言识别失败', $res);
             return;
         }
     }
