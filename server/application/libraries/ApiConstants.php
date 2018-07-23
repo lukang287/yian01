@@ -10,6 +10,7 @@ const API_RET_SUCCESS=0;
 const API_RET_INVALID_INPUT=1;
 const API_RET_DB_ERROR=2;
 const API_RET_THIRD_ERROR=3;
+const API_RET_SYSTEM_ERROR = 4;
 const API_RET_UNKNOWN_ERROR=99;
 
 class ApiConstants {
@@ -19,6 +20,7 @@ class ApiConstants {
         API_RET_DB_ERROR => 'database error',
         API_RET_THIRD_ERROR => 'thrid party return error',
         API_RET_UNKNOWN_ERROR => 'unknown error',
+        API_RET_SYSTEM_ERROR => 'system error',
     );
 
     public static function getErrorMsg($error_code){

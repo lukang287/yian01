@@ -23,7 +23,7 @@ CREATE TABLE `ya_voice` (
   `voice_id` int(32) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(32) NOT NULL,
   `voice_ftp_path` varchar(255) NOT NULL,
-  `user_input_text` varchar(512) DEFAULT '0' COMMENT '0正常，1删除',
+  `user_input_text` varchar(512) DEFAULT NULL COMMENT '用户输入文本',
   `voice_text_tx` varchar(512) DEFAULT NULL COMMENT '腾讯语言识别文本',
   `voice_text_bd` varchar(512) DEFAULT NULL COMMENT '百度语言识别文本',
   `voice_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0正常，1删除',
