@@ -37,7 +37,7 @@ class User extends MY_Controller {
             }else{
                 //插入
                 $insert_item = array(
-                    'open_id' => $wx_user_info['open_id'],
+                    'open_id' => $wx_user_info['openId'],
                     'nick_name' => $wx_user_info['nickName'],
                     'province' => $wx_user_info['province'],
                     'logo_url' => $wx_user_info['avatarUrl'],
