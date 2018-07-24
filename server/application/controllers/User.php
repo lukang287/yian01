@@ -64,9 +64,8 @@ class User extends MY_Controller {
     public function getUserInfo(){
         $result = LoginService::check();
         if ($result['loginState'] === Constants::S_AUTH) {
-            $wx_user_info = $this->_object2array_pre($result['userinfo']);
-            log_message('debug', '获得的微信用户信息：'.var_export($wx_user_info, true));
-            $wx_user_info = $wx_user_info['userinfo'];
+            log_message('debug', '获得的微信用户信息：'.var_export($result['userinfo'], true));
+            $wx_user_info = $result['userinfo'];
             $user_ret = $this->user_model->select_user_by_open_id($wx_user_info['openId'], array('user_id'));
             if ($user_ret['user_id'] > 0){
                 api_return_json(API_RET_SUCCESS, 'ok', array_merge($result['userinfo'], $user_ret));
