@@ -21,7 +21,7 @@ class User extends MY_Controller {
         $result = LoginService::login();
         if ($result['loginState'] === Constants::S_AUTH) {
             //保存用户数据到ya项目库
-            $wx_user_info = json_decode($result['userinfo']);
+            $wx_user_info = $result['userinfo'];
             $open_id = $wx_user_info['open_id'];
             if ($this->user_model->count_user_by_open_id($open_id)){
                 //更新
