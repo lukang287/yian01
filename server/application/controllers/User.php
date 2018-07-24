@@ -42,7 +42,7 @@ class User extends MY_Controller {
                     'create_time' => date('Y-m-d H:i:s'),
                     'last_visit_time' => date('Y-m-d H:i:s'),
                 );
-                $this->user_model->insert($insert_item);
+                $this->user_model->insert_user($insert_item);
             }
             $user_id = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
             if ($user_id > 0){

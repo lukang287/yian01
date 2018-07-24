@@ -19,6 +19,7 @@ Page({
         var that = this
 
         // 调用登录接口
+        qcloud.setLoginUrl(config.service.loginUrl);
         qcloud.login({
             success(result) {
                 if (result) {
