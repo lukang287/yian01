@@ -23,16 +23,16 @@ Page({
         qcloud.login({
             success(result) {
                 console.log(result);
-                wx.setStorage({
-                  key: 'userInfo',
-                  data: result,
-                });
                 if (result) {
                     util.showSuccess('登录成功')
                     that.setData({
                         userInfo: result,
                         logged: true
                     })
+                    wx.setStorage({
+                      key: 'userInfo',
+                      data: result,
+                    });
                 } else {
                     // 如果不是首次登录，不会返回用户信息，请求用户信息接口获取
                     qcloud.request({

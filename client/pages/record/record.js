@@ -19,7 +19,7 @@ let playingVoiceIndex = 0;
  */
 Page({
   data: {
-    userId:0,
+    userId:"",
     notes: []
   },
 
@@ -27,11 +27,13 @@ Page({
     // 读取储存着的笔记
     let notes = JSON.parse(wx.getStorageSync('notes') || '[]');
 
+    var that = this
+
     wx.getStorage({
       key: 'userInfo',
       success: function (res) {
-        console.log(res.data);
-        this.data.userId = res.data.userId;
+        console.log(res);
+        that.setData({userId:res.data.user_id})
       }
     });
 
@@ -198,7 +200,7 @@ Page({
    */
   recognizeVoice(key, path) {
     wx.uploadFile({
-      url: config.service.voiceUrl,
+      url: config.service.voiceUrl+'/'+this.data.userId,
       filePath: path,
       name: 'file',
       success: res => {

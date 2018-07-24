@@ -21,8 +21,8 @@ class User extends MY_Controller {
         $result = LoginService::login();
         if ($result['loginState'] === Constants::S_AUTH) {
             //保存用户数据到ya项目库
+            log_message('debug', '获得的微信用户信息：'.var_export($result['userinfo'], true));
             $wx_user_info = $this->_object2array_pre($result['userinfo']);
-            log_message('debug', '获得的微信用户信息：'.var_export($wx_user_info, true));
             $wx_user_info = $wx_user_info['userinfo'];
             $open_id = $wx_user_info['openId'];
             if ($this->user_model->count_user_by_open_id($open_id)){
@@ -49,7 +49,7 @@ class User extends MY_Controller {
             $user_ret = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
             log_message('debug', '查询的user id = '.var_export($user_ret, true));
             if ($user_ret['user_id'] > 0){
-                api_return_json(API_RET_SUCCESS, 'ok', array_merge($result['userinfo'], $user_ret));
+                api_return_json(API_RET_SUCCESS, 'ok', array_merge($result['userinfo']['userinfo'], $user_ret));
                 return;
             }else{
                 api_return_json(API_RET_DB_ERROR, '数据库操作失败');
