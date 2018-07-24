@@ -49,7 +49,7 @@ class User extends MY_Controller {
             $user_ret = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
             log_message('debug', '查询的user id = '.var_export($user_ret, true));
             if ($user_ret['user_id'] > 0){
-                api_return_json(Constants::S_AUTH, 'ok', array_merge($result['userinfo'], array('user_id'=>$user_id)));
+                api_return_json(Constants::S_AUTH, 'ok', array_merge($result['userinfo'], $user_ret));
                 return;
             }else{
                 api_return_json(Constants::E_AUTH, '数据库操作失败');
