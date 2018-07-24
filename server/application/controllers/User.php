@@ -21,7 +21,7 @@ class User extends MY_Controller {
         $result = LoginService::login();
         if ($result['loginState'] === Constants::S_AUTH) {
             //保存用户数据到ya项目库
-            $wx_user_info = $result['userinfo'];
+            $wx_user_info = $this->_object2array_pre($result['userinfo']);
             log_message('debug', '获得的微信用户信息：'.var_export($wx_user_info, true));
             $open_id = $wx_user_info['open_id'];
             if ($this->user_model->count_user_by_open_id($open_id)){
@@ -75,5 +75,21 @@ class User extends MY_Controller {
     }
 
     /**************查询用户**********************/
-
+    private function _object2array_pre(&$object) {
+        if (is_object($object)) {
+            $arr = (array)($object);
+        } else {
+            $arr = &$object;
+        }
+        if (is_array($arr)) {
+            foreach($arr as $varName => $varValue){
+                $arr[$varName] = $this->_object2array($varValue);
+            }
+        }
+        return $arr;
+    }
+    private function _object2array(&$object) {
+        $object =  json_decode( json_encode( $object),true);
+        return  $object;
+    }
 }
