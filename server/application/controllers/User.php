@@ -24,6 +24,7 @@ class User extends MY_Controller {
             log_message('debug', '获得的微信用户信息：'.var_export($result['userinfo'], true));
             $wx_user_info = $this->_object2array_pre($result['userinfo']);
             $wx_user_info = $wx_user_info['userinfo'];
+            $skey = $wx_user_info['skey'];
             $open_id = $wx_user_info['openId'];
             if ($this->user_model->count_user_by_open_id($open_id)){
                 //更新
@@ -49,7 +50,7 @@ class User extends MY_Controller {
             $user_ret = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
             log_message('debug', '查询的user id = '.var_export($user_ret, true));
             if ($user_ret['user_id'] > 0){
-                api_return_json(API_RET_SUCCESS, 'ok', array_merge($wx_user_info, $user_ret));
+                api_return_json(API_RET_SUCCESS, 'ok', array('code'=>0,'data'=>array('userinfo'=>array_merge($wx_user_info, $user_ret)),'skey'=>$skey));
                 return;
             }else{
                 api_return_json(API_RET_DB_ERROR, '数据库操作失败');
