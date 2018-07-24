@@ -22,6 +22,11 @@ Page({
         qcloud.setLoginUrl(config.service.loginUrl);
         qcloud.login({
             success(result) {
+                console.log(result);
+                wx.setStorage({
+                  key: 'userInfo',
+                  data: result,
+                });
                 if (result) {
                     util.showSuccess('登录成功')
                     that.setData({
@@ -34,6 +39,11 @@ Page({
                         url: config.service.requestUrl,
                         login: true,
                         success(result) {
+                            console.log(result);
+                            wx.setStorage({
+                              key: 'userInfo',
+                              data: result.data.data,
+                            });
                             util.showSuccess('登录成功')
                             that.setData({
                                 userInfo: result.data.data,

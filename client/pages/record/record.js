@@ -19,12 +19,21 @@ let playingVoiceIndex = 0;
  */
 Page({
   data: {
+    userId:0,
     notes: []
   },
 
   onLoad() {
     // 读取储存着的笔记
     let notes = JSON.parse(wx.getStorageSync('notes') || '[]');
+
+    wx.getStorage({
+      key: 'userInfo',
+      success: function (res) {
+        console.log(res.data);
+        this.data.userId = res.data.userId;
+      }
+    });
 
     // 添加播放标记
     notes = notes.map(v => {  
