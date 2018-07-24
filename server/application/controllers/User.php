@@ -46,14 +46,14 @@ class User extends MY_Controller {
             }
             $user_id = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
             if ($user_id > 0){
-                api_return_json(API_RET_SUCCESS, 'ok', array_merge($result['userinfo'], array('user_id'=>$user_id)));
+                api_return_json(Constants::S_AUTH, 'ok', array_merge($result['userinfo'], array('user_id'=>$user_id)));
                 return;
             }else{
-                api_return_json(API_RET_DB_ERROR, '数据库操作失败');
+                api_return_json(Constants::E_AUTH, '数据库操作失败');
                 return;
             }
         }else{
-            api_return_json(API_RET_INVALID_INPUT, '用户未登录');
+            api_return_json(Constants::E_AUTH, '用户未登录');
             return;
         }
     }
@@ -61,10 +61,10 @@ class User extends MY_Controller {
     public function getUserInfo(){
         $result = LoginService::check();
         if ($result['loginState'] === Constants::S_AUTH) {
-            api_return_json(API_RET_SUCCESS, 'ok', $result['userinfo']);
+            api_return_json(Constants::S_AUTH, 'ok', $result['userinfo']);
             return;
         } else {
-            api_return_json(API_RET_INVALID_INPUT, '用户未登录');
+            api_return_json(Constants::E_AUTH, '用户未登录');
             return;
         }
     }
