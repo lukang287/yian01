@@ -51,11 +51,7 @@ class User_model extends MY_Model{
         $this->db->where(array('open_id'=>$open_id));
         $this->db->select($new_ret);
         $query = $this->db->get($this->table_name);
-        foreach ($query->result() as $row)
-        {
-            return $row;
-        }
-        return null;
+        return $query->row();
     }
 
 }
