@@ -47,6 +47,7 @@ class User extends MY_Controller {
                 $this->user_model->insert_user($insert_item);
             }
             $user_id = $this->user_model->select_user_by_open_id($open_id, array('user_id'));
+            log_message('debug', '查询的user id = '.var_export($user_id, true));
             if ($user_id > 0){
                 api_return_json(Constants::S_AUTH, 'ok', array_merge($result['userinfo'], array('user_id'=>$user_id)));
                 return;
