@@ -49,7 +49,8 @@ class User_model extends MY_Model{
             if (in_array($field, $this->field_return)) $new_ret[] = $field;
         }
         $this->db->where(array('open_id'=>$open_id));
-        return $this->db->select($new_ret);
+        $this->db->select($new_ret);
+        return $this->db->get($this->table_name);
     }
 
 }
