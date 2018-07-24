@@ -22,9 +22,10 @@ class User extends MY_Controller {
         if ($result['loginState'] === Constants::S_AUTH) {
             //保存用户数据到ya项目库
             log_message('debug', '获得的微信用户信息：'.var_export($result['userinfo'], true));
-            $wx_user_info = $this->_object2array_pre($result['userinfo']);
-            $wx_user_info = $wx_user_info['userinfo'];
-            $skey = $wx_user_info['skey'];
+            $trans_info = $this->_object2array_pre($result['userinfo']);
+            log_message('debug', '转换之后的信息为：'.var_export($trans_info, true));
+            $skey = $trans_info['skey'];
+            $wx_user_info = $trans_info['userinfo'];
             $open_id = $wx_user_info['openId'];
             if ($this->user_model->count_user_by_open_id($open_id)){
                 //更新
