@@ -54,3 +54,12 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['weapp'] = '/';
 $route['weapp/(.+)'] = '$1';
+
+$route['user/login'] = 'user/login';
+$route['user/getUserInfo'] = 'user/getUserInfo';
+
+$route['voice/recognize_bd/(:num)'] = 'voice/recognize_bd/$1';
+$route['voice/user_input'] = 'voice/user_input';
+$route['voice/get_list/(:num)'] = 'voice/get_list/$1';
+$route['voice/update/(:num)'] = 'voice/update/$1';
+$route['voice/delete/(:num)'] = 'voice/delete/$1';

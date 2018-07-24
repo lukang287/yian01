@@ -1,0 +1,10 @@
+<!--pages/list/list.wxml-->
+<block wx:for="{{list}}">
+<navigator url="../home/home?id={{item.channel_id}}" hover-class="navigator-hover">//id为要传的值的key,下个页面会用到
+    <view class="right">
+    <text class="">{{item.create_time}}</text>
+    <text class="title">{{item.text}}</text>
+    <button ></button>
+    </view>
+</navigator>
+</block>

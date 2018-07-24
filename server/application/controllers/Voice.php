@@ -1,15 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/7/8 0008
- * Time: 23:50
+ * User: lukang
+ * Date: 2018/7/23
  */
-
-require dirname(__FILE__).'/../third_party/aip-speech-php-sdk-1.6.0/AipSpeech.php';
-
 use FtpClient\FtpClient;
 
+//百度支持的语音模型常量
 const BAIDU_CHN_EN = 1536;//普通话(支持简单的英文识别)搜索模型	无标点	支持自定义词库
 const BAIDU_CHN = 1537;//普通话(纯中文识别)	输入法模型	有标点	不支持自定义词库
 const BAIDU_EN = 1737; //英语		有标点	不支持自定义词库
@@ -17,8 +14,8 @@ const BAIDU_YUEYU = 1637;//粤语		有标点	不支持自定义词库
 const BAIDU_SICHUAN = 1837;//四川话		有标点	不支持自定义词库
 const BAIDU_CHN_YUAN = 1936;//普通话远场	远场模型	有标点	不支持
 
-class Recongnisebd extends MY_Controller{
-
+class Voice extends MY_Controller
+{
     private $voice_id = '';
     private $local_mp3_file = '';
     private $local_pcm_file = '';
@@ -28,10 +25,10 @@ class Recongnisebd extends MY_Controller{
     private $ftp_config = array();
     private $ftp_client = null;
 
-    public function __construct()
+    function __construct()
     {
         parent::__construct();
-        $this->load->model("voice_model");
+        $this->load->model('voice_model');
         //连接ftp
         $this->ftp_config = $this->config->item('ftp.config');
         $this->ftp_client = new FtpClient();
@@ -39,7 +36,9 @@ class Recongnisebd extends MY_Controller{
         $this->ftp_client->login($this->ftp_config['username'], $this->ftp_config['password']);
     }
 
-    public function index(){
+    //百度语音识别
+    public function recognize_bd($user_id){
+        require dirname(__FILE__).'/../third_party/aip-speech-php-sdk-1.6.0/AipSpeech.php';
         $file = $_FILES['file']; // 去除 field 值为 file 的文件
         // 处理文件上传
         log_message('debug', '接收到的音频数据为： '.var_export($_FILES, true));
@@ -50,13 +49,11 @@ class Recongnisebd extends MY_Controller{
             api_return_json(API_RET_INVALID_INPUT, '接收MP3文件失败');
             return ;
         }
-
         //转码到pcm
-        if (!$this->_convert_to_mp3()){
+        if (!$this->_convert_to_pcm()){
             api_return_json(API_RET_SYSTEM_ERROR, 'MP3转码pcm失败');
             return ;
         }
-
         //发送到百度获取识别文本，更新数据库
         $access_token = $this->_get_baidu_accessToken();
         if (!$access_token){
@@ -68,7 +65,7 @@ class Recongnisebd extends MY_Controller{
         // 识别本地文件
         $yian_track_id = generate_unique_id();
         $res = $client->asr(file_get_contents($this->local_pcm_file), 'pcm', 16000, array(
-            'dev_pid' => BAIDU_CHN_EN,'cuid'=> $yian_track_id, 'token' => $access_token
+            'dev_pid' => BAIDU_CHN_EN, 'cuid'=> $yian_track_id, 'token' => $access_token
         ));
         //echo 'baidu res - '.var_export($res, true);
         log_message('debug', '百度语言识别返回的结果为:'.var_export($res, true));
@@ -87,13 +84,13 @@ class Recongnisebd extends MY_Controller{
                 //ftp文件存入数据库
                 $db_insert = array(
                     'voice_id' => $this->voice_id,
-                    'user_id' => 'xxx',
+                    'user_id' => $user_id,
                     'voice_ftp_path' => $this->remote_ftp_path,
                     'user_input_text' => '',
                     'voice_text_tx' => '',
                     'voice_text_bd' => $baidu_msg,
                     'voice_status' => 0,
-                    'create_time' => now(),
+                    'create_time' => date('Y-m-d H:i:s'),
                     'update_time' => '',
                 );
                 $db_ret = $this->voice_model->insert($db_insert);
@@ -106,7 +103,6 @@ class Recongnisebd extends MY_Controller{
             //删除本地文件
             @unlink($this->local_mp3_file);
             @unlink($this->local_pcm_file);
-
             //返回处理结果
             $ret_msg = array(array('code'=> 0, 'text'=>$baidu_msg, 'message'=>'ok'));
             api_return_json(API_RET_SUCCESS, 'success', $ret_msg);
@@ -122,6 +118,34 @@ class Recongnisebd extends MY_Controller{
         }
     }
 
+    //腾讯语言识别
+    public function recognize_tx(){
+
+    }
+
+    //用户手输入语音文本
+    public function user_input(){
+
+    }
+
+    //获取用户的语言列表
+    public function get_list(){
+
+    }
+
+    //更新语音文本
+    public function update($voice_id){
+        //获取用户id
+
+    }
+
+    //删除语音
+    public function delete($voice_id){
+        //获取用户id
+
+    }
+
+    /***********************私有方法***********************************************/
     private function _get_recv_mp3($file){
 
         ini_set('upload_max_filesize', '1M');
@@ -146,8 +170,9 @@ class Recongnisebd extends MY_Controller{
         return true;
     }
 
-    private function _convert_to_mp3(){
+    private function _convert_to_pcm(){
         $this->local_pcm_file = APPPATH.'cache/c_voice_'.$this->voice_id.'.pcm';
+        //mp3 文件转 16K 16bits 位深的单声道 pcm文件
         $ffmpeg_cmd = sprintf("ffmpeg -y  -i %s -acodec pcm_s16le -f s16le -ac 1 -ar 16000 %s", $this->local_mp3_file, $this->local_pcm_file);
         $convert_res = system($ffmpeg_cmd);
         if ($convert_res === false){
